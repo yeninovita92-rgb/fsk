@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Interaktif: Arus Bolak-Balik (AC)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- KaTeX CSS & JS for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 9999px;
+        }
+        .katex-display {
+            margin: 0.5em 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 4px 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col md:flex-row transition-colors duration-200">
+
+    <!-- Mobile Header -->
+    <header class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
+        <div class="flex items-center space-x-2">
+            <i class="fa-solid fa-bolt text-amber-500 text-xl"></i>
+            <span class="font-bold text-lg tracking-tight">Fisika AC Interactive</span>
+        </div>
+        <button id="mobile-menu-btn" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col justify-between">
+        <div class="p-5 overflow-y-auto custom-scrollbar flex-1">
+            <div class="hidden md:flex items-center space-x-3 mb-8">
+                <div class="p-2.5 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-xl text-white shadow-lg shadow-sky-500/30">
+                    <i class="fa-solid fa-bolt text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Fisika SMA</h1>
+                    <p class="text-xs text-sky-500 dark:text-sky-400 font-medium">Arus Bolak-Balik (AC)</p>
+                </div>
+            </div>
+
+            <nav class="space-y-1">
+                <p class="px-3 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Daftar Sub-Materi</p>
+                
+                <a href="#resistif" class="nav-item active flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group">
+                    <span class="w-7 h-7 rounded-lg bg-sky-100 dark:bg-sky-900/50 text-sky-600 dark:text-sky-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">1</span>
+                    <span>Rangkaian Resistif (R)</span>
+                </a>
+
+                <a href="#induktif" class="nav-item flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <span class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">2</span>
+                    <span>Rangkaian Induktif (L)</span>
+                </a>
+
+                <a href="#kapasitif" class="nav-item flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <span class="w-7 h-7 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">3</span>
+                    <span>Rangkaian Kapasitif (C)</span>
+                </a>
+
+                <a href="#seri-rl" class="nav-item flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <span class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">4</span>
+                    <span>Rangkaian Seri R-L</span>
+                </a>
+
+                <a href="#seri-rc" class="nav-item flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <span class="w-7 h-7 rounded-lg bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">5</span>
+                    <span>Rangkaian Seri R-C</span>
+                </a>
+
+                <a href="#seri-rlc" class="nav-item flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <span class="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">6</span>
+                    <span>Rangkaian Seri RLC</span>
+                </a>
+
+                <a href="#resonansi" class="nav-item flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <span class="w-7 h-7 rounded-lg bg-teal-100 dark:bg-teal-900/50 text-teal-600 dark:text-teal-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">7</span>
+                    <span>Resonansi Seri RLC</span>
+                </a>
+
+                <a href="#daya-ac" class="nav-item flex items-center px-3 py-2.5 text-sm font-medium rounded-xl transition-all duration-150 group text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50">
+                    <span class="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center mr-3 font-semibold text-xs group-hover:scale-110 transition-transform">8</span>
+                    <span>Daya Rangkaian AC</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Theme Toggle Footer -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Mode Tampilan</span>
+            <button id="theme-toggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                <i class="fa-solid fa-moon dark:hidden"></i>
+                <i class="fa-solid fa-sun hidden dark:block text-amber-400"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Overlay Mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/50 z-30 hidden md:hidden backdrop-blur-sm"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 md:ml-72 p-4 md:p-8 max-w-6xl mx-auto w-full custom-scrollbar">
+
+        <!-- Banner Intro -->
+        <div class="mb-8 p-6 md:p-8 rounded-3xl bg-gradient-to-r from-sky-600 via-indigo-600 to-purple-600 text-white shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+                <i class="fa-solid fa-wave-square text-[220px]"></i>
+            </div>
+            <div class="relative z-10 max-w-2xl">
+                <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase text-sky-100">Modul Fisika Interaktif</span>
+                <h2 class="text-2xl md:text-4xl font-extrabold mt-3 tracking-tight">Analisis Arus Bolak-Balik (AC)</h2>
+                <p class="mt-2 text-sky-100 text-sm md:text-base leading-relaxed">Pelajari konsep dasar impedansi, beda fase, diagram fasor, hingga resonansi RLC secara visual dengan simulasi interaktif.</p>
+            </div>
+        </div>
+
+        <!-- 1. RANGKAIAN RESISTIF MURNI -->
+        <section id="resistif" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-sky-500/20">1</span>
+                    <h3 class="text-xl md:text-2xl font-bold">Rangkaian Resistif Murni (R)</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Penjelasan & Rumus -->
+                    <div class="space-y-4">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Pada rangkaian resistif murni, sumber tegangan AC dihubungkan secara langsung dengan hambatan/resistor ($R$). Hambatan tidak menyebabkan pergeseran fase antara tegangan ($V$) dan arus ($I$). 
+                        </p>
+                        
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                            <h4 class="font-semibold text-xs uppercase tracking-wider text-sky-600 dark:text-sky-400">Persamaan Gelombang:</h4>
+                            <div class="text-sm">
+                                $$V = V_m \sin(\omega t)$$
+                                $$I = I_m \sin(\omega t)$$
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-sky-50 dark:bg-sky-950/40 rounded-xl border border-sky-200 dark:border-sky-800/60 text-sky-800 dark:text-sky-200 text-sm">
+                            <i class="fa-solid fa-circle-info mr-2"></i>
+                            <strong>Karakteristik Utama:</strong> Tegangan dan arus berada dalam kondisi <strong>Sephase ($\phi = 0^\circ$)</strong>. Beda fase antara keduanya adalah 0.
+                        </div>
+                    </div>
+
+                    <!-- Diagram Visual -->
+                    <div class="space-y-4">
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-700">
+                            <p class="text-xs text-slate-400 mb-2 font-mono text-center">Skema Rangkaian & Diagram Fasor</p>
+                            <div class="grid grid-cols-2 gap-2 h-44 items-center justify-center">
+                                <!-- SVG Rangkaian -->
+                                <svg viewBox="0 0 200 140" class="w-full h-full">
+                                    <!-- Generator AC -->
+                                    <circle cx="40" cy="70" r="18" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 30 70 Q 35 60 40 70 T 50 70" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <!-- Wire -->
+                                    <path d="M 40 52 V 20 H 160 V 50 M 160 90 V 120 H 40 V 88" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <!-- Resistor -->
+                                    <path d="M 160 50 L 152 54 L 168 60 L 152 66 L 168 72 L 152 78 L 168 84 L 160 90" fill="none" stroke="#f43f5e" stroke-width="2"/>
+                                    <text x="175" y="73" fill="#f43f5e" font-size="12" font-weight="bold">R</text>
+                                    <text x="40" y="102" fill="#38bdf8" font-size="10" text-anchor="middle">V(t)</text>
+                                </svg>
+
+                                <!-- SVG Fasor -->
+                                <svg viewBox="0 0 160 140" class="w-full h-full">
+                                    <line x1="20" y1="70" x2="140" y2="70" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+                                    <line x1="30" y1="120" x2="30" y2="20" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+                                    <!-- Panah V -->
+                                    <line x1="30" y1="70" x2="130" y2="70" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+                                    <!-- Panah I (berhimpit) -->
+                                    <line x1="30" y1="70" x2="100" y2="70" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)"/>
+                                    <text x="132" y="65" fill="#38bdf8" font-size="10" font-weight="bold">V</text>
+                                    <text x="102" y="85" fill="#f59e0b" font-size="10" font-weight="bold">I</text>
+                                    <text x="80" y="110" fill="#94a3b8" font-size="10" text-anchor="middle">Beda Fase = 0°</text>
+                                    <defs>
+                                        <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/></marker>
+                                        <marker id="arrow-amber" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b"/></marker>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Grafik Sinus -->
+                        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-slate-400 font-mono">Grafik Gelombang V & I</span>
+                                <div class="flex items-center space-x-3 text-xs">
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 bg-sky-400 rounded-full inline-block mr-1"></span>V(t)</span>
+                                    <span class="flex items-center"><span class="w-2.5 h-2.5 bg-amber-400 rounded-full inline-block mr-1"></span>I(t)</span>
+                                </div>
+                            </div>
+                            <canvas id="canvas-resistif" class="w-full h-32 bg-slate-950 rounded-lg"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. RANGKAIAN INDUKTIF MURNI -->
+        <section id="induktif" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-emerald-500/20">2</span>
+                    <h3 class="text-xl md:text-2xl font-bold">Rangkaian Induktif Murni (L)</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Penjelasan & Rumus -->
+                    <div class="space-y-4">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Ketika sumber AC dihubungkan dengan induktor murni ($L$), induktor akan menghasilkan GGL induksi yang menolak perubahan arus. Akibatnya, <strong>tegangan ($V$) mendahului arus ($I$) sebesar $90^\circ$ ($\pi/2$)</strong>.
+                        </p>
+                        
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                            <h4 class="font-semibold text-xs uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Reaktansi Induktif & Persamaan:</h4>
+                            <div class="text-sm">
+                                $$X_L = \omega L = 2\pi f L$$
+                                $$V = V_m \sin(\omega t + 90^\circ)$$
+                                $$I = I_m \sin(\omega t)$$
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-200 text-sm">
+                            <i class="fa-solid fa-bolt mr-2"></i>
+                            <strong>Hambatan Induktor ($X_L$):</strong> Makin tinggi frekuensi ($f$) sumber AC, makin besar hambatan reaktansi induktifnya.
+                        </div>
+                    </div>
+
+                    <!-- Diagram Visual -->
+                    <div class="space-y-4">
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-700">
+                            <p class="text-xs text-slate-400 mb-2 font-mono text-center">Skema Rangkaian & Diagram Fasor</p>
+                            <div class="grid grid-cols-2 gap-2 h-44 items-center justify-center">
+                                <!-- SVG Rangkaian -->
+                                <svg viewBox="0 0 200 140" class="w-full h-full">
+                                    <circle cx="40" cy="70" r="18" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 30 70 Q 35 60 40 70 T 50 70" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 40 52 V 20 H 160 V 40 M 160 100 V 120 H 40 V 88" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <!-- Inductor Coils -->
+                                    <path d="M 160 40 C 175 40, 175 55, 160 55 C 175 55, 175 70, 160 70 C 175 70, 175 85, 160 85 C 175 85, 175 100, 160 100" fill="none" stroke="#10b981" stroke-width="2"/>
+                                    <text x="180" y="73" fill="#10b981" font-size="12" font-weight="bold">L</text>
+                                </svg>
+
+                                <!-- SVG Fasor -->
+                                <svg viewBox="0 0 160 140" class="w-full h-full">
+                                    <line x1="20" y1="90" x2="140" y2="90" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+                                    <line x1="50" y1="130" x2="50" y2="20" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+                                    <!-- V mendahului I sebesar 90 deg -->
+                                    <line x1="50" y1="90" x2="50" y2="30" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+                                    <line x1="50" y1="90" x2="120" y2="90" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)"/>
+                                    <text x="55" y="30" fill="#38bdf8" font-size="10" font-weight="bold">V_L</text>
+                                    <text x="122" y="85" fill="#f59e0b" font-size="10" font-weight="bold">I</text>
+                                    <path d="M 70 90 A 20 20 0 0 0 50 70" fill="none" stroke="#10b981" stroke-width="1.5"/>
+                                    <text x="72" y="75" fill="#10b981" font-size="9">90°</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Grafik Sinus -->
+                        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-slate-400 font-mono">Grafik (V mendahului I sebesar 90°)</span>
+                            </div>
+                            <canvas id="canvas-induktif" class="w-full h-32 bg-slate-950 rounded-lg"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. RANGKAIAN KAPASITIF MURNI -->
+        <section id="kapasitif" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-purple-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-purple-500/20">3</span>
+                    <h3 class="text-xl md:text-2xl font-bold">Rangkaian Kapasitif Murni (C)</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Penjelasan & Rumus -->
+                    <div class="space-y-4">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Ketika kapasitor ($C$) dihubungkan ke arus AC, kapasitor akan mengisi dan mengosongkan muatan. Di sini, <strong>arus ($I$) mendahului tegangan ($V$) sebesar $90^\circ$ ($\pi/2$)</strong>.
+                        </p>
+                        
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                            <h4 class="font-semibold text-xs uppercase tracking-wider text-purple-600 dark:text-purple-400">Reaktansi Kapasitif & Persamaan:</h4>
+                            <div class="text-sm">
+                                $$X_C = \frac{1}{\omega C} = \frac{1}{2\pi f C}$$
+                                $$V = V_m \sin(\omega t)$$
+                                $$I = I_m \sin(\omega t + 90^\circ)$$
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-purple-50 dark:bg-purple-950/40 rounded-xl border border-purple-200 dark:border-purple-800/60 text-purple-800 dark:text-purple-200 text-sm">
+                            <i class="fa-solid fa-bolt mr-2"></i>
+                            <strong>Hambatan Kapasitor ($X_C$):</strong> Berbanding terbalik dengan frekuensi ($f$). Semakin tinggi frekuensi, $X_C$ makin kecil.
+                        </div>
+                    </div>
+
+                    <!-- Diagram Visual -->
+                    <div class="space-y-4">
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-700">
+                            <p class="text-xs text-slate-400 mb-2 font-mono text-center">Skema Rangkaian & Diagram Fasor</p>
+                            <div class="grid grid-cols-2 gap-2 h-44 items-center justify-center">
+                                <!-- SVG Rangkaian -->
+                                <svg viewBox="0 0 200 140" class="w-full h-full">
+                                    <circle cx="40" cy="70" r="18" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 30 70 Q 35 60 40 70 T 50 70" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 40 52 V 20 H 160 V 65 M 160 75 V 120 H 40 V 88" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <!-- Capacitors Plates -->
+                                    <line x1="140" y1="65" x2="180" y2="65" stroke="#a855f7" stroke-width="3"/>
+                                    <line x1="140" y1="75" x2="180" y2="75" stroke="#a855f7" stroke-width="3"/>
+                                    <text x="185" y="74" fill="#a855f7" font-size="12" font-weight="bold">C</text>
+                                </svg>
+
+                                <!-- SVG Fasor -->
+                                <svg viewBox="0 0 160 140" class="w-full h-full">
+                                    <line x1="20" y1="50" x2="140" y2="50" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+                                    <line x1="50" y1="130" x2="50" y2="20" stroke="#475569" stroke-width="1" stroke-dasharray="3 3"/>
+                                    <!-- I mendahului V sebesar 90 deg -->
+                                    <line x1="50" y1="50" x2="50" y2="110" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+                                    <line x1="50" y1="50" x2="120" y2="50" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrow-amber)"/>
+                                    <text x="55" y="115" fill="#38bdf8" font-size="10" font-weight="bold">V_C</text>
+                                    <text x="122" y="45" fill="#f59e0b" font-size="10" font-weight="bold">I</text>
+                                    <path d="M 70 50 A 20 20 0 0 1 50 70" fill="none" stroke="#a855f7" stroke-width="1.5"/>
+                                    <text x="72" y="65" fill="#a855f7" font-size="9">90°</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Grafik Sinus -->
+                        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-slate-400 font-mono">Grafik (I mendahului V sebesar 90°)</span>
+                            </div>
+                            <canvas id="canvas-kapasitif" class="w-full h-32 bg-slate-950 rounded-lg"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. RANGKAIAN SERI R-L -->
+        <section id="seri-rl" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-amber-500/20">4</span>
+                    <h3 class="text-xl md:text-2xl font-bold">Rangkaian Seri R-L</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Penjelasan & Rumus -->
+                    <div class="space-y-4">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Rangkaian gabungan Resistor ($R$) dan Induktor ($L$) yang disusun seri. Total hambatan gabungan dinamakan **Impedansi ($Z$)**. Tegangan total $V$ mendahului arus $I$ sebesar sudut fase $\phi$ ($0^\circ < \phi < 90^\circ$).
+                        </p>
+                        
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                            <h4 class="font-semibold text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400">Rumus Utama RL Seri:</h4>
+                            <div class="text-sm">
+                                $$Z = \sqrt{R^2 + X_L^2}$$
+                                $$V = \sqrt{V_R^2 + V_L^2}$$
+                                $$\tan\phi = \frac{X_L}{R} = \frac{V_L}{V_R}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diagram Visual -->
+                    <div class="space-y-4">
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-700">
+                            <p class="text-xs text-slate-400 mb-2 font-mono text-center">Fasor Impedansi RL & Skema</p>
+                            <div class="grid grid-cols-2 gap-2 h-44 items-center justify-center">
+                                <!-- SVG Fasor Z -->
+                                <svg viewBox="0 0 160 140" class="w-full h-full">
+                                    <line x1="20" y1="110" x2="140" y2="110" stroke="#475569" stroke-width="1"/>
+                                    <line x1="30" y1="120" x2="30" y2="20" stroke="#475569" stroke-width="1"/>
+                                    <!-- R -->
+                                    <line x1="30" y1="110" x2="110" y2="110" stroke="#f43f5e" stroke-width="2"/>
+                                    <!-- XL -->
+                                    <line x1="110" y1="110" x2="110" y2="40" stroke="#10b981" stroke-width="2" stroke-dasharray="2 2"/>
+                                    <!-- Z Resultan -->
+                                    <line x1="30" y1="110" x2="110" y2="40" stroke="#f59e0b" stroke-width="3" marker-end="url(#arrow-amber)"/>
+                                    <text x="70" y="125" fill="#f43f5e" font-size="10">R</text>
+                                    <text x="115" y="75" fill="#10b981" font-size="10">X_L</text>
+                                    <text x="60" y="65" fill="#f59e0b" font-size="11" font-weight="bold">Z</text>
+                                    <path d="M 50 110 A 20 20 0 0 0 45 98" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                    <text x="55" y="102" fill="#f59e0b" font-size="9">ϕ</text>
+                                </svg>
+
+                                <!-- SVG Skema R-L -->
+                                <svg viewBox="0 0 180 140" class="w-full h-full">
+                                    <circle cx="30" cy="70" r="14" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 22 70 Q 26 62 30 70 T 38 70" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 30 56 V 30 H 70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <!-- R -->
+                                    <path d="M 70 30 L 74 24 L 80 36 L 86 24 L 92 36 L 98 24 L 104 36 L 108 30" fill="none" stroke="#f43f5e" stroke-width="2"/>
+                                    <path d="M 108 30 H 130" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <!-- L -->
+                                    <path d="M 130 30 C 130 15, 142 15, 142 30 C 142 15, 154 15, 154 30 C 154 15, 166 15, 166 30" fill="none" stroke="#10b981" stroke-width="2"/>
+                                    <path d="M 166 30 H 170 V 110 H 30 V 84" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <text x="86" y="18" fill="#f43f5e" font-size="10" text-anchor="middle">R</text>
+                                    <text x="148" y="18" fill="#10b981" font-size="10" text-anchor="middle">L</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+                            <canvas id="canvas-seri-rl" class="w-full h-32 bg-slate-950 rounded-lg"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. RANGKAIAN SERI R-C -->
+        <section id="seri-rc" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-rose-500/20">5</span>
+                    <h3 class="text-xl md:text-2xl font-bold">Rangkaian Seri R-C</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Penjelasan & Rumus -->
+                    <div class="space-y-4">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Rangkaian seri Resistor ($R$) dan Kapasitor ($C$). Pada R-C seri, arus $I$ mendahului tegangan $V$ sebesar sudut fase $\phi$. Beda fase bernilai negatif jika ditinjau dari acuan tegangan.
+                        </p>
+                        
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                            <h4 class="font-semibold text-xs uppercase tracking-wider text-rose-600 dark:text-rose-400">Rumus Utama RC Seri:</h4>
+                            <div class="text-sm">
+                                $$Z = \sqrt{R^2 + X_C^2}$$
+                                $$V = \sqrt{V_R^2 + V_C^2}$$
+                                $$\tan\phi = \frac{-X_C}{R} = \frac{-V_C}{V_R}$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diagram Visual -->
+                    <div class="space-y-4">
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-700">
+                            <p class="text-xs text-slate-400 mb-2 font-mono text-center">Fasor Impedansi RC & Skema</p>
+                            <div class="grid grid-cols-2 gap-2 h-44 items-center justify-center">
+                                <!-- SVG Fasor Z -->
+                                <svg viewBox="0 0 160 140" class="w-full h-full">
+                                    <line x1="20" y1="30" x2="140" y2="30" stroke="#475569" stroke-width="1"/>
+                                    <line x1="30" y1="20" x2="30" y2="120" stroke="#475569" stroke-width="1"/>
+                                    <!-- R -->
+                                    <line x1="30" y1="30" x2="110" y2="30" stroke="#f43f5e" stroke-width="2"/>
+                                    <!-- XC -->
+                                    <line x1="110" y1="30" x2="110" y2="100" stroke="#a855f7" stroke-width="2" stroke-dasharray="2 2"/>
+                                    <!-- Z Resultan -->
+                                    <line x1="30" y1="30" x2="110" y2="100" stroke="#f43f5e" stroke-width="3" marker-end="url(#arrow-red)"/>
+                                    <text x="70" y="20" fill="#f43f5e" font-size="10">R</text>
+                                    <text x="115" y="70" fill="#a855f7" font-size="10">X_C</text>
+                                    <text x="60" y="80" fill="#f43f5e" font-size="11" font-weight="bold">Z</text>
+                                    <defs>
+                                        <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f43f5e"/></marker>
+                                    </defs>
+                                </svg>
+
+                                <!-- SVG Skema R-C -->
+                                <svg viewBox="0 0 180 140" class="w-full h-full">
+                                    <circle cx="30" cy="70" r="14" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 22 70 Q 26 62 30 70 T 38 70" fill="none" stroke="#38bdf8" stroke-width="2"/>
+                                    <path d="M 30 56 V 30 H 70" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <!-- R -->
+                                    <path d="M 70 30 L 74 24 L 80 36 L 86 24 L 92 36 L 98 24 L 104 36 L 108 30" fill="none" stroke="#f43f5e" stroke-width="2"/>
+                                    <path d="M 108 30 H 135" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <!-- C -->
+                                    <line x1="135" y1="20" x2="135" y2="40" stroke="#a855f7" stroke-width="3"/>
+                                    <line x1="143" y1="20" x2="143" y2="40" stroke="#a855f7" stroke-width="3"/>
+                                    <path d="M 143 30 H 170 V 110 H 30 V 84" fill="none" stroke="#94a3b8" stroke-width="2"/>
+                                    <text x="86" y="18" fill="#f43f5e" font-size="10" text-anchor="middle">R</text>
+                                    <text x="139" y="15" fill="#a855f7" font-size="10" text-anchor="middle">C</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+                            <canvas id="canvas-seri-rc" class="w-full h-32 bg-slate-950 rounded-lg"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. RANGKAIAN SERI RLC & SIMULATOR -->
+        <section id="seri-rlc" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-indigo-500/20">6</span>
+                    <div>
+                        <h3 class="text-xl md:text-2xl font-bold">Rangkaian Seri RLC & Simulator Interaktif</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Gabungan R, L, dan C dalam satu rangkaian seri AC</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-semibold text-xs text-indigo-600 dark:text-indigo-400 uppercase">Impedansi Total (Z):</h4>
+                        <p class="text-sm">$$Z = \sqrt{R^2 + (X_L - X_C)^2}$$</p>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-semibold text-xs text-indigo-600 dark:text-indigo-400 uppercase">Tegangan Total (V):</h4>
+                        <p class="text-sm">$$V = \sqrt{V_R^2 + (V_L - V_C)^2}$$</p>
+                    </div>
+
+                    <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-semibold text-xs text-indigo-600 dark:text-indigo-400 uppercase">Sudut Fase ($\phi$):</h4>
+                        <p class="text-sm">$$\tan\phi = \frac{X_L - X_C}{R}$$</p>
+                    </div>
+                </div>
+
+                <!-- Tiga Sifat RLC -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="p-4 rounded-xl border border-emerald-200 dark:border-emerald-800/50 bg-emerald-50/50 dark:bg-emerald-950/20">
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400 text-sm block mb-1">1. bersifat Induktif</span>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Jika $X_L > X_C$. Tegangan mendahului arus. Sudut fase $\phi > 0$.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-purple-200 dark:border-purple-800/50 bg-purple-50/50 dark:bg-purple-950/20">
+                        <span class="font-bold text-purple-600 dark:text-purple-400 text-sm block mb-1">2. bersifat Kapasitif</span>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Jika $X_C > X_L$. Arus mendahului tegangan. Sudut fase $\phi < 0$.</p>
+                    </div>
+                    <div class="p-4 rounded-xl border border-sky-200 dark:border-sky-800/50 bg-sky-50/50 dark:bg-sky-950/20">
+                        <span class="font-bold text-sky-600 dark:text-sky-400 text-sm block mb-1">3. bersifat Resistif (Resonansi)</span>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Jika $X_L = X_C$. Impedansi minimum ($Z = R$), arus maksimum.</p>
+                    </div>
+                </div>
+
+                <!-- SIMULATOR INTERAKTIF -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-slate-700 text-white shadow-2xl">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-4 mb-6 gap-2">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-sliders text-indigo-400"></i>
+                            <h4 class="font-bold text-lg">Laboratorium & Simulator RLC Interaktif</h4>
+                        </div>
+                        <span id="sim-status-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 w-fit">
+                            Sifat: Induktif
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Control Sliders -->
+                        <div class="lg:col-span-5 space-y-4">
+                            <!-- Slider R -->
+                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-300 font-medium">Hambatan (R)</span>
+                                    <span id="val-r" class="font-bold text-rose-400">50 Ω</span>
+                                </div>
+                                <input id="slider-r" type="range" min="1" max="200" value="50" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-rose-500">
+                            </div>
+
+                            <!-- Slider L -->
+                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-300 font-medium">Induktansi (L)</span>
+                                    <span id="val-l" class="font-bold text-emerald-400">0.30 H</span>
+                                </div>
+                                <input id="slider-l" type="range" min="0.05" max="1.0" step="0.01" value="0.3" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+                            </div>
+
+                            <!-- Slider C -->
+                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-300 font-medium">Kapasitansi (C)</span>
+                                    <span id="val-c" class="font-bold text-purple-400">25 µF</span>
+                                </div>
+                                <input id="slider-c" type="range" min="5" max="100" step="1" value="25" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-500">
+                            </div>
+
+                            <!-- Slider f -->
+                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-300 font-medium">Frekuensi (f)</span>
+                                    <span id="val-f" class="font-bold text-sky-400">50 Hz</span>
+                                </div>
+                                <input id="slider-f" type="range" min="10" max="150" step="1" value="50" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                            </div>
+
+                            <!-- Slider Vm -->
+                            <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/60">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-slate-300 font-medium">Tegangan Maksimum ($V_m$)</span>
+                                    <span id="val-vm" class="font-bold text-amber-400">100 V</span>
+                                </div>
+                                <input id="slider-vm" type="range" min="20" max="250" value="100" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                            </div>
+                        </div>
+
+                        <!-- Live Calculation Results & Canvas -->
+                        <div class="lg:col-span-7 space-y-4 flex flex-col justify-between">
+                            <!-- Cards Output -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+                                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Reaktansi X<sub>L</sub></span>
+                                    <span id="out-xl" class="text-sm font-bold text-emerald-400">94.2 Ω</span>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+                                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Reaktansi X<sub>C</sub></span>
+                                    <span id="out-xc" class="text-sm font-bold text-purple-400">127.3 Ω</span>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+                                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Impedansi Z</span>
+                                    <span id="out-z" class="text-sm font-bold text-indigo-400">59.8 Ω</span>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+                                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Arus Max I<sub>m</sub></span>
+                                    <span id="out-im" class="text-sm font-bold text-amber-400">1.67 A</span>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+                                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Sudut Fase ϕ</span>
+                                    <span id="out-phi" class="text-sm font-bold text-sky-400">-33.5°</span>
+                                </div>
+                                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 text-center">
+                                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Freq Resonansi f<sub>r</sub></span>
+                                    <span id="out-fr" class="text-sm font-bold text-teal-400">58.1 Hz</span>
+                                </div>
+                            </div>
+
+                            <!-- Real-time Canvas Simulation -->
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs text-slate-400 font-mono">Visualisasi Real-Time Sinusoidal</span>
+                                    <div class="flex items-center space-x-3 text-xs">
+                                        <span class="flex items-center"><span class="w-2.5 h-2.5 bg-sky-400 rounded-full inline-block mr-1"></span>V(t)</span>
+                                        <span class="flex items-center"><span class="w-2.5 h-2.5 bg-amber-400 rounded-full inline-block mr-1"></span>I(t)</span>
+                                    </div>
+                                </div>
+                                <canvas id="canvas-rlc-sim" class="w-full h-44 rounded-lg bg-slate-950"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. RESONANSI RANGKAIAN SERI RLC -->
+        <section id="resonansi" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-teal-500/20">7</span>
+                    <h3 class="text-xl md:text-2xl font-bold">Resonansi Rangkaian Seri RLC</h3>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Penjelasan Teori -->
+                    <div class="space-y-4">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Resonansi terjadi ketika **reaktansi induktif ($X_L$) sama dengan reaktansi kapasitif ($X_C$)**. Pada keadaan ini, efek induktor dan kapasitor saling meniadakan, sehingga impedansi bernilai minimum ($Z = R$) dan arus mencapai nilai maksimum.
+                        </p>
+
+                        <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                            <h4 class="font-semibold text-xs uppercase tracking-wider text-teal-600 dark:text-teal-400">Frekuensi Resonansi ($f_r$):</h4>
+                            <div class="text-sm">
+                                $$X_L = X_C \implies 2\pi f L = \frac{1}{2\pi f C}$$
+                                $$f_r = \frac{1}{2\pi \sqrt{L C}}$$
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-teal-50 dark:bg-teal-950/40 rounded-xl border border-teal-200 dark:border-teal-800/60 text-teal-800 dark:text-teal-200 text-sm space-y-1">
+                            <h5 class="font-bold text-xs uppercase tracking-wider">Aplikasi Dalam Kehidupan:</h5>
+                            <p class="text-xs">Digunakan pada sistem tuning radio & penerima sinyal TV untuk memilih frekuensi pemancar tertentu.</p>
+                        </div>
+                    </div>
+
+                    <!-- Kurva Resonansi Interaktif dengan Chart.js -->
+                    <div class="space-y-3">
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                            <p class="text-xs text-slate-400 mb-2 font-mono text-center">Kurva Respon Arus Terhadap Frekuensi I(f)</p>
+                            <div class="h-56 relative">
+                                <canvas id="chart-resonansi"></canvas>
+                            </div>
+                            <p class="text-[11px] text-slate-400 text-center mt-2">Puncak grafik menunjukkan Arus Maksimum saat $f = f_r$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. DAYA PADA RANGKAIAN ARUS BOLAK-BALIK -->
+        <section id="daya-ac" class="content-section mb-12 scroll-mt-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-slate-100 dark:border-slate-700 pb-4 mb-6">
+                    <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-amber-500/20">8</span>
+                    <h3 class="text-xl md:text-2xl font-bold">Daya pada Rangkaian Arus Bolak-Balik</h3>
+                </div>
+
+                <!-- Penjelasan Konsep Daya -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <div class="space-y-4">
+                        <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Pada sistem AC, daya sesaat berubah setiap saat karena arus dan tegangan berosilasi sinusoid. Terdapat tiga komponen daya utama yang membentuk <strong>Segitiga Daya</strong>:
+                        </p>
+
+                        <div class="space-y-3">
+                            <div class="p-3.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <h4 class="font-bold text-xs uppercase text-amber-600 dark:text-amber-400">1. Daya Aktif / Rata-Rata ($P$)</h4>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Daya sesungguhnya yang diserap dan diubah menjadi energi lain (panas, gerak). Satuan: <strong>Watt (W)</strong>.</p>
+                                <p class="text-sm font-semibold mt-1">$$P = V_{ef} \cdot I_{ef} \cdot \cos\phi$$</p>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <h4 class="font-bold text-xs uppercase text-emerald-600 dark:text-emerald-400">2. Daya Reaktif ($Q$)</h4>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Daya yang disimpan dan dikembalikan oleh elemen reaktif ($L$ dan $C$). Satuan: <strong>VAR (Volt-Ampere Reactive)</strong>.</p>
+                                <p class="text-sm font-semibold mt-1">$$Q = V_{ef} \cdot I_{ef} \cdot \sin\phi$$</p>
+                            </div>
+
+                            <div class="p-3.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200 dark:border-slate-700">
+                                <h4 class="font-bold text-xs uppercase text-sky-600 dark:text-sky-400">3. Daya Semu / Tampak ($S$)</h4>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">Total daya yang disuplai oleh sumber PLN/AC. Satuan: <strong>VA (Volt-Ampere)</strong>.</p>
+                                <p class="text-sm font-semibold mt-1">$$S = V_{ef} \cdot I_{ef} = \sqrt{P^2 + Q^2}$$</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-200 text-sm">
+                            <i class="fa-solid fa-lightbulb mr-2"></i>
+                            <strong>Faktor Daya ($\cos\phi$):</strong> Perbandingan antara Daya Aktif ($P$) dan Daya Semu ($S$). Nilai $\cos\phi = \frac{P}{S} = \frac{R}{Z}$ berkisar antara $0$ sampai $1$. Semakin mendekati 1, efisiensi penggunaan listrik semakin baik.
+                        </div>
+                    </div>
+
+                    <!-- Visual Segitiga Daya SVG & Diagram Gelombang Daya -->
+                    <div class="space-y-4">
+                        <div class="bg-slate-900 rounded-xl p-4 border border-slate-700">
+                            <p class="text-xs text-slate-400 mb-2 font-mono text-center">Visualisasi Segitiga Daya</p>
+                            <div class="h-44 flex items-center justify-center">
+                                <svg viewBox="0 0 200 140" class="w-full h-full max-w-xs">
+                                    <line x1="20" y1="110" x2="180" y2="110" stroke="#334155" stroke-width="1"/>
+                                    <line x1="30" y1="120" x2="30" y2="10" stroke="#334155" stroke-width="1"/>
+                                    <!-- P (Daya Aktif) -->
+                                    <line x1="30" y1="110" x2="140" y2="110" stroke="#f59e0b" stroke-width="3"/>
+                                    <!-- Q (Daya Reaktif) -->
+                                    <line x1="140" y1="110" x2="140" y2="30" stroke="#10b981" stroke-width="3" stroke-dasharray="3 3"/>
+                                    <!-- S (Daya Semu) -->
+                                    <line x1="30" y1="110" x2="140" y2="30" stroke="#0284c7" stroke-width="3" marker-end="url(#arrow-sky)"/>
+                                    <text x="80" y="125" fill="#f59e0b" font-size="11" font-weight="bold">P (Watt)</text>
+                                    <text x="146" y="70" fill="#10b981" font-size="11" font-weight="bold">Q (VAR)</text>
+                                    <text x="70" y="60" fill="#38bdf8" font-size="11" font-weight="bold">S (VA)</text>
+                                    <path d="M 55 110 A 25 25 0 0 0 48 95" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                    <text x="58" y="100" fill="#f59e0b" font-size="10">ϕ</text>
+                                    <defs>
+                                        <marker id="arrow-sky" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0284c7"/></marker>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Canvas Grafik Daya Sesaat P(t) -->
+                        <div class="bg-slate-900 rounded-xl p-3 border border-slate-700">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs text-slate-400 font-mono">Grafik Daya Sesaat P(t) = V(t) × I(t)</span>
+                                <div class="flex items-center space-x-2 text-[10px]">
+                                    <span class="flex items-center"><span class="w-2 h-2 bg-amber-400 rounded-full inline-block mr-1"></span>P(t)</span>
+                                </div>
+                            </div>
+                            <canvas id="canvas-daya-sesaat" class="w-full h-32 bg-slate-950 rounded-lg"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KALKULATOR DAYA AC INTERAKTIF -->
+                <div class="bg-slate-900 rounded-2xl p-6 border border-slate-700 text-white shadow-2xl">
+                    <div class="flex items-center space-x-2 border-b border-slate-800 pb-3 mb-6">
+                        <i class="fa-solid fa-calculator text-amber-400 text-lg"></i>
+                        <h4 class="font-bold text-base">Kalkulator Interaktif Segitiga & Faktor Daya AC</h4>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700">
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Tegangan Efektif $V_{ef}$ (Volt)</label>
+                            <input id="calc-vef" type="number" value="220" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-semibold text-sky-400 focus:outline-none focus:border-sky-500">
+                        </div>
+
+                        <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700">
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Arus Efektif $I_{ef}$ (Ampere)</label>
+                            <input id="calc-ief" type="number" value="5" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-semibold text-amber-400 focus:outline-none focus:border-amber-500">
+                        </div>
+
+                        <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700">
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Sudut Fase $\phi$ (Derajat)</label>
+                            <input id="calc-phi" type="number" value="30" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-semibold text-emerald-400 focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+
+                    <!-- Output Kalkulator Daya -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Faktor Daya cos ϕ</span>
+                            <span id="calc-out-cos" class="text-sm md:text-base font-bold text-amber-400">0.866</span>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Daya Aktif (P)</span>
+                            <span id="calc-out-p" class="text-sm md:text-base font-bold text-emerald-400">952.6 W</span>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Daya Reaktif (Q)</span>
+                            <span id="calc-out-q" class="text-sm md:text-base font-bold text-purple-400">550.0 VAR</span>
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-xl border border-slate-700 text-center">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Daya Semu (S)</span>
+                            <span id="calc-out-s" class="text-sm md:text-base font-bold text-sky-400">1100.0 VA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-xs text-slate-400 dark:text-slate-500 pb-8 border-t border-slate-200 dark:border-slate-800 pt-6">
+            <p>© 2026 Media Pembelajaran Fisika SMA - Arus Bolak-Balik (AC) Interaktif.</p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // DOM Elements
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        // Mobile Menu Toggle
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+        mobileMenuBtn?.addEventListener('click', toggleSidebar);
+        sidebarOverlay?.addEventListener('click', toggleSidebar);
+
+        // Theme Toggle (Dark/Light)
+        themeToggleBtn?.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+
+        // Smooth Scroll & Active Link State
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                navItems.forEach(nav => {
+                    nav.classList.remove('active', 'bg-sky-50', 'dark:bg-sky-950/50', 'text-sky-600', 'dark:text-sky-400');
+                    nav.classList.add('text-slate-600', 'dark:text-slate-300');
+                });
+                item.classList.add('active', 'bg-sky-50', 'dark:bg-sky-950/50', 'text-sky-600', 'dark:text-sky-400');
+                item.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+                if (window.innerWidth < 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+
+        // Helper Canvas Sine Drawer
+        function drawSineWave(canvasId, phaseShiftDeg, colorV = '#38bdf8', colorI = '#f59e0b') {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dynamic width
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerY = height / 2;
+            const amplitude = height * 0.35;
+            const phaseRad = (phaseShiftDeg * Math.PI) / 180;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw Axis
+            ctx.beginPath();
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+
+            // Draw Voltage V(t)
+            ctx.beginPath();
+            ctx.strokeStyle = colorV;
+            ctx.lineWidth = 2;
+            for (let x = 0; x < width; x++) {
+                const angle = (x / width) * Math.PI * 4; // 2 full cycles
+                const y = centerY - Math.sin(angle) * amplitude;
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Draw Current I(t)
+            ctx.beginPath();
+            ctx.strokeStyle = colorI;
+            ctx.lineWidth = 2;
+            for (let x = 0; x < width; x++) {
+                const angle = (x / width) * Math.PI * 4;
+                const y = centerY - Math.sin(angle + phaseRad) * (amplitude * 0.75);
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        // Initialize Static Curves
+        function initStaticCanvasGraphs() {
+            drawSineWave('canvas-resistif', 0);        // 0 deg phase
+            drawSineWave('canvas-induktif', -90);      // V leads I by 90 (or I lags V by 90)
+            drawSineWave('canvas-kapasitif', 90);      // I leads V by 90
+            drawSineWave('canvas-seri-rl', -45);       // V leads I by angle phi
+            drawSineWave('canvas-seri-rc', 45);        // I leads V by angle phi
+            drawPowerWave('canvas-daya-sesaat', 30);   // Canvas Grafik Daya Sesaat
+        }
+
+        // Drawer Grafik Daya Sesaat P(t) = V(t) * I(t)
+        function drawPowerWave(canvasId, phaseShiftDeg) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerY = height * 0.75;
+            const phaseRad = (phaseShiftDeg * Math.PI) / 180;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Axis
+            ctx.beginPath();
+            ctx.strokeStyle = '#334155';
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+
+            // P(t) Wave
+            ctx.beginPath();
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            for (let x = 0; x < width; x++) {
+                const angle = (x / width) * Math.PI * 4;
+                const v = Math.sin(angle);
+                const i = Math.sin(angle - phaseRad);
+                const p = v * i; // Power
+                const y = centerY - p * (height * 0.45);
+
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        // LOGIK KALKULATOR DAYA AC
+        function calculatePowerValues() {
+            const Vef = parseFloat(document.getElementById('calc-vef')?.value || 0);
+            const Ief = parseFloat(document.getElementById('calc-ief')?.value || 0);
+            const phiDeg = parseFloat(document.getElementById('calc-phi')?.value || 0);
+
+            const phiRad = (phiDeg * Math.PI) / 180;
+            const cosPhi = Math.cos(phiRad);
+            const sinPhi = Math.sin(phiRad);
+
+            const S = Vef * Ief;
+            const P = S * cosPhi;
+            const Q = S * sinPhi;
+
+            document.getElementById('calc-out-cos').innerText = cosPhi.toFixed(3);
+            document.getElementById('calc-out-p').innerText = `${P.toFixed(1)} W`;
+            document.getElementById('calc-out-q').innerText = `${Math.abs(Q).toFixed(1)} VAR`;
+            document.getElementById('calc-out-s').innerText = `${S.toFixed(1)} VA`;
+
+            drawPowerWave('canvas-daya-sesaat', phiDeg);
+        }
+
+        // Attach listeners for power calculator
+        ['calc-vef', 'calc-ief', 'calc-phi'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', calculatePowerValues);
+        });
+
+        // SIMULATOR RLC REALTIME LOGIC
+        const sliderR = document.getElementById('slider-r');
+        const sliderL = document.getElementById('slider-l');
+        const sliderC = document.getElementById('slider-c');
+        const sliderF = document.getElementById('slider-f');
+        const sliderVm = document.getElementById('slider-vm');
+
+        let animationTime = 0;
+
+        function updateRlcSimulation() {
+            const R = parseFloat(sliderR.value);
+            const L = parseFloat(sliderL.value);
+            const C = parseFloat(sliderC.value) * 1e-6; // convert uF to F
+            const f = parseFloat(sliderF.value);
+            const Vm = parseFloat(sliderVm.value);
+
+            // Update Labels
+            document.getElementById('val-r').innerText = `${R} Ω`;
+            document.getElementById('val-l').innerText = `${L.toFixed(2)} H`;
+            document.getElementById('val-c').innerText = `${sliderC.value} µF`;
+            document.getElementById('val-f').innerText = `${f} Hz`;
+            document.getElementById('val-vm').innerText = `${Vm} V`;
+
+            // Physics Calculations
+            const omega = 2 * Math.PI * f;
+            const XL = omega * L;
+            const XC = 1 / (omega * C);
+            const Z = Math.sqrt(R * R + Math.pow(XL - XC, 2));
+            const Im = Vm / Z;
+            
+            // Phase angle in radians & degrees
+            const phiRad = Math.atan2(XL - XC, R);
+            const phiDeg = (phiRad * 180) / Math.PI;
+
+            // Resonant Frequency
+            const fr = 1 / (2 * Math.PI * Math.sqrt(L * C));
+
+            // Update Outputs UI
+            document.getElementById('out-xl').innerText = `${XL.toFixed(1)} Ω`;
+            document.getElementById('out-xc').innerText = `${XC.toFixed(1)} Ω`;
+            document.getElementById('out-z').innerText = `${Z.toFixed(1)} Ω`;
+            document.getElementById('out-im').innerText = `${Im.toFixed(2)} A`;
+            document.getElementById('out-phi').innerText = `${phiDeg.toFixed(1)}°`;
+            document.getElementById('out-fr').innerText = `${fr.toFixed(1)} Hz`;
+
+            // Badge status
+            const badge = document.getElementById('sim-status-badge');
+            if (Math.abs(XL - XC) < 1.0) {
+                badge.innerText = 'Sifat: Resonansi (Resistif)';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 w-fit';
+            } else if (XL > XC) {
+                badge.innerText = 'Sifat: Induktif (V Mendahului I)';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 w-fit';
+            } else {
+                badge.innerText = 'Sifat: Kapasitif (I Mendahului V)';
+                badge.className = 'px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30 w-fit';
+            }
+
+            // Draw Realtime Canvas
+            drawAnimatedRlc(Vm, Im, phiRad, f);
+            
+            // Sync Chart Resonansi
+            updateResonanceChart(R, L, C, Vm, fr);
+        }
+
+        function drawAnimatedRlc(Vm, Im, phiRad, f) {
+            const canvas = document.getElementById('canvas-rlc-sim');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerY = height / 2;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Center Grid Axis
+            ctx.beginPath();
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+
+            // Voltage Wave V(t)
+            ctx.beginPath();
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2.5;
+            for (let x = 0; x < width; x++) {
+                const t = (x / width) * 0.04; // 40ms window
+                const y = centerY - (Math.sin(2 * Math.PI * f * t - animationTime) * (height * 0.38));
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Current Wave I(t)
+            ctx.beginPath();
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            for (let x = 0; x < width; x++) {
+                const t = (x / width) * 0.04;
+                // Current has phase shift: I(t) = Im * sin(wt - phi)
+                const y = centerY - (Math.sin(2 * Math.PI * f * t - phiRad - animationTime) * (height * 0.28));
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        // Animation Loop
+        function animateLoop() {
+            animationTime += 0.05;
+            const R = parseFloat(sliderR.value);
+            const L = parseFloat(sliderL.value);
+            const C = parseFloat(sliderC.value) * 1e-6;
+            const f = parseFloat(sliderF.value);
+            const Vm = parseFloat(sliderVm.value);
+
+            const omega = 2 * Math.PI * f;
+            const XL = omega * L;
+            const XC = 1 / (omega * C);
+            const Z = Math.sqrt(R * R + Math.pow(XL - XC, 2));
+            const Im = Vm / Z;
+            const phiRad = Math.atan2(XL - XC, R);
+
+            drawAnimatedRlc(Vm, Im, phiRad, f);
+            requestAnimationFrame(animateLoop);
+        }
+
+        // CHART RESONANSI (Chart.js)
+        let resonanceChart = null;
+
+        function initResonanceChart() {
+            const ctx = document.getElementById('chart-resonansi')?.getContext('2d');
+            if (!ctx) return;
+
+            resonanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Arus Maksimum I_m (A)',
+                        data: [],
+                        borderColor: '#14b8a6',
+                        backgroundColor: 'rgba(20, 184, 166, 0.15)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#94a3b8', font: { size: 10 } } },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Frekuensi (Hz)', color: '#64748b', font: { size: 10 } },
+                            ticks: { color: '#64748b', font: { size: 9 } },
+                            grid: { color: '#1e293b' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Arus (A)', color: '#64748b', font: { size: 10 } },
+                            ticks: { color: '#64748b', font: { size: 9 } },
+                            grid: { color: '#1e293b' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateResonanceChart(R, L, C, Vm, fr) {
+            if (!resonanceChart) return;
+
+            const labels = [];
+            const dataI = [];
+            
+            const startF = Math.max(5, Math.floor(fr * 0.2));
+            const endF = Math.floor(fr * 2.2);
+            const step = Math.max(1, Math.floor((endF - startF) / 40));
+
+            for (let fIter = startF; fIter <= endF; fIter += step) {
+                const w = 2 * Math.PI * fIter;
+                const XL = w * L;
+                const XC = 1 / (w * C);
+                const Z = Math.sqrt(R * R + Math.pow(XL - XC, 2));
+                const I = Vm / Z;
+
+                labels.push(fIter);
+                dataI.push(I.toFixed(3));
+            }
+
+            resonanceChart.data.labels = labels;
+            resonanceChart.data.datasets[0].data = dataI;
+            resonanceChart.update('none'); // silent update for performance
+        }
+
+        // Attach Listeners to Sliders
+        [sliderR, sliderL, sliderC, sliderF, sliderVm].forEach(slider => {
+            slider?.addEventListener('input', updateRlcSimulation);
+        });
+
+        // Window Resize Listener for Responsive Canvas
+        window.addEventListener('resize', () => {
+            initStaticCanvasGraphs();
+        });
+
+        // Window Load Event
+        window.onload = function () {
+            initStaticCanvasGraphs();
+            initResonanceChart();
+            updateRlcSimulation();
+            calculatePowerValues();
+            animateLoop();
+        };
+    </script>
+</body>
+</html>
